@@ -151,6 +151,7 @@ IMPORTANT GUIDELINES:
 
   return (
     <div className={styles.app}>
+      <div className={styles.topBar}>Stec Groep</div>
       <div className={styles.bgBlobs}>
         <div className={styles.blob1} />
         <div className={styles.blob2} />

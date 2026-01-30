@@ -68,6 +68,19 @@
   transform: rotate(20deg);
 }
 
+/* Top bar */
+.topBar {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  background: #0098d8;
+  color: #ffffff;
+  padding: 0.65rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 /* Header */
 .header {
   position: relative;
