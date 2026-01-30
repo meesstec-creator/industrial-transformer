@@ -164,6 +164,18 @@
   font-weight: 600;
 }
 
+.cardDesc {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #666;
+  margin-top: 0.2rem;
+}
+
+.active .cardDesc {
+  color: #5eaaff;
+}
+
 /* Generate button */
 .generateBtn {
   display: flex;

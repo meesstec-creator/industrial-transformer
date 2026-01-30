@@ -24,6 +24,7 @@ function App() {
   const [generatedImage, setGeneratedImage] = useState(null);
   const [selectedStyle, setSelectedStyle] = useState("modern-industrieel");
   const [buildingType, setBuildingType] = useState("warehouse");
+  const [transformMode, setTransformMode] = useState("renovatie");
   const [usedPrompt, setUsedPrompt] = useState(null);
   const [error, setError] = useState(null);
   const [apiKey, setApiKey] = useState(() => localStorage.getItem("pollinations-api-key") || "sk_MGCJnAI2YG9Zz9Cqh5wC1UPEIBHUKPZH");
@@ -53,8 +54,10 @@ function App() {
     const styleInfo = STYLES.find((s) => s.id === selectedStyle);
     const buildingInfo = BUILDING_TYPES.find((b) => b.id === buildingType);
 
-    const prompt = uploadedImage
-      ? `You are an expert in real estate development and architecture. Edit this photo of a ${buildingInfo.prompt} and create a realistic redevelopment in the style: ${styleInfo.name} (${styleInfo.prompt}).
+    let prompt;
+
+    if (uploadedImage && transformMode === "renovatie") {
+      prompt = `You are an expert in real estate development and architecture. Edit this photo of a ${buildingInfo.prompt} and create a realistic redevelopment in the style: ${styleInfo.name} (${styleInfo.prompt}).
 
 IMPORTANT GUIDELINES:
 - KEEP the EXISTING scale, footprint and basic structure of the building
@@ -63,8 +66,20 @@ IMPORTANT GUIDELINES:
 - Be realistic about what is achievable with this specific building
 - Only modernize the building facade and add green urban landscaping (trees, grass, hedges) to the public space
 - The result must describe the ORIGINAL building with improvements, not a fantasy building
-- Photorealistic architectural photography edit`
-      : `Architectural photography of a renovated ${buildingInfo.prompt} transformed into ${styleInfo.prompt}. The building maintains its original footprint and scale but features a completely modernized exterior. This is a realistic transformation, not a fantasy building. Keep the surroundings urban and contextual. Add green public space with trees, grass and hedges around the building. Professional architectural visualization, golden hour lighting, photorealistic, street-level perspective, high-end real estate photography style`;
+- Photorealistic architectural photography edit`;
+    } else if (uploadedImage && transformMode === "volledig") {
+      prompt = `You are an expert in real estate development and architecture. Edit this photo: replace the ${buildingInfo.prompt} with a completely new building in the style: ${styleInfo.name} (${styleInfo.prompt}).
+
+IMPORTANT GUIDELINES:
+- The new building must fit on the EXACT SAME plot/parcel as the current building. Do NOT make it wider or take space from neighboring properties
+- Keep the EXACT same perspective, camera angle, and viewpoint
+- Keep ALL surroundings exactly the same: same cars on the road, same street, same sky, same neighboring buildings, same trees that are not on the plot
+- Only replace the building itself and add green urban landscaping (trees, grass, hedges) to the public space directly around it
+- The new building should be a realistic, buildable design - not a fantasy
+- Photorealistic architectural photography, same lighting conditions as original photo`;
+    } else {
+      prompt = `Architectural photography of a renovated ${buildingInfo.prompt} transformed into ${styleInfo.prompt}. The building maintains its original footprint and scale but features a completely modernized exterior. This is a realistic transformation, not a fantasy building. Keep the surroundings urban and contextual. Add green public space with trees, grass and hedges around the building. Professional architectural visualization, golden hour lighting, photorealistic, street-level perspective, high-end real estate photography style`;
+    }
 
     try {
       let refImageUrl = "";
@@ -91,16 +106,31 @@ IMPORTANT GUIDELINES:
         imageUrl += `&image=${encodeURIComponent(refImageUrl)}`;
       }
 
-      const response = await fetch(imageUrl);
+      const MODELS = ["nanobanana-pro", "nanobanana", "gptimage"];
+      let response;
+      let lastError = "";
 
-      if (!response.ok) {
+      for (const model of MODELS) {
+        const url = imageUrl.replace("model=nanobanana-pro", `model=${model}`);
+        response = await fetch(url);
+
+        if (response.ok) break;
+
         const text = await response.text().catch(() => "");
-        let msg = `Fout ${response.status}`;
         try {
           const json = JSON.parse(text);
-          msg = json.error?.message || msg;
-        } catch { msg = text || msg; }
-        throw new Error(msg);
+          lastError = json.error?.message || json.message || text;
+        } catch { lastError = text; }
+
+        // Retry with next model on 429 or 5xx
+        if (response.status === 429 || response.status >= 500) {
+          continue;
+        }
+        throw new Error(lastError || `Fout ${response.status}`);
+      }
+
+      if (!response.ok) {
+        throw new Error(lastError || "Alle modellen zijn overbelast. Probeer het later opnieuw.");
       }
 
       const blob = await response.blob();
@@ -195,6 +225,26 @@ IMPORTANT GUIDELINES:
             </div>
           </div>
 
+          <div className={styles.section}>
+            <label className={styles.label}>4. Transformatie modus</label>
+            <div className={styles.cardList}>
+              <div
+                className={`${styles.styleCard} ${transformMode === "renovatie" ? styles.active : ""}`}
+                onClick={() => setTransformMode("renovatie")}
+              >
+                Renovatie
+                <span className={styles.cardDesc}>Gevel aanpassen, structuur behouden</span>
+              </div>
+              <div
+                className={`${styles.styleCard} ${transformMode === "volledig" ? styles.active : ""}`}
+                onClick={() => setTransformMode("volledig")}
+              >
+                Volledige herontwikkeling
+                <span className={styles.cardDesc}>Nieuw gebouw, zelfde perceel en omgeving</span>
+              </div>
+            </div>
+          </div>
+
           <button
             className={styles.generateBtn}
             onClick={generateVisualization}
@@ -211,7 +261,8 @@ IMPORTANT GUIDELINES:
             <h2 className={styles.resultsTitle}>Jouw Herontwikkeling</h2>
             <p className={styles.resultsSummary}>
               <strong>{currentBuilding?.name}</strong> &rarr;{" "}
-              <strong>{currentStyle?.name}</strong>
+              <strong>{currentStyle?.name}</strong>{" "}
+              ({transformMode === "renovatie" ? "Renovatie" : "Volledige herontwikkeling"})
             </p>
 
             {usedPrompt && (
