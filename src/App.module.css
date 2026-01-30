@@ -16,7 +16,7 @@
   font-size: 1.8rem;
   font-weight: 700;
   margin: 0;
-  background: linear-gradient(135deg, #4a9eff, #a0d0ff);
+  background: linear-gradient(135deg, #0098d8, #5ec4ed);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -84,7 +84,7 @@
 
 .apiKeyInput:focus {
   outline: none;
-  border-color: #4a9eff;
+  border-color: #0098d8;
 }
 
 .apiKeyHint {
@@ -94,7 +94,7 @@
 }
 
 .apiKeyHint a {
-  color: #4a9eff;
+  color: #0098d8;
   text-decoration: none;
 }
 
@@ -118,8 +118,8 @@
 }
 
 .upload:hover {
-  border-color: #4a9eff;
-  background: #1a1a2a;
+  border-color: #0098d8;
+  background: #0f1a22;
 }
 
 .uploadedImg {
@@ -153,14 +153,14 @@
 }
 
 .styleCard:hover {
-  border-color: #4a9eff;
+  border-color: #0098d8;
   color: #e0e0e0;
 }
 
 .active {
-  background: #1a2a40;
-  border-color: #4a9eff;
-  color: #4a9eff;
+  background: #0a2535;
+  border-color: #0098d8;
+  color: #0098d8;
   font-weight: 600;
 }
 
@@ -173,7 +173,7 @@
 }
 
 .active .cardDesc {
-  color: #5eaaff;
+  color: #40b0e0;
 }
 
 /* Generate button */
@@ -183,7 +183,7 @@
   justify-content: center;
   width: 100%;
   padding: 0.85rem;
-  background: linear-gradient(135deg, #4a9eff, #2d7ed6);
+  background: linear-gradient(135deg, #0098d8, #006e9e);
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -225,7 +225,7 @@
 .resultsTitle {
   font-size: 1.3rem;
   margin: 0;
-  background: linear-gradient(135deg, #4a9eff, #a0d0ff);
+  background: linear-gradient(135deg, #0098d8, #5ec4ed);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -247,7 +247,7 @@
 
 .promptTitle {
   font-size: 0.75rem;
-  color: #4a9eff;
+  color: #0098d8;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin: 0 0 0.4rem;
