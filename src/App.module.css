@@ -18,46 +18,54 @@
   color: #1a1a2e;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   position: relative;
+}
+
+/* Blob container */
+.bgBlobs {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   overflow: hidden;
 }
 
-.app::before {
-  content: "";
-  position: fixed;
-  top: -15%;
-  right: -10%;
+/* Blob 1 – largest, lichtgroen/lime, bottom-left flowing to top-right */
+.blob1 {
+  position: absolute;
+  bottom: -12%;
+  left: -10%;
+  width: 65%;
+  height: 70%;
+  background: #d7f6d2;
+  opacity: 0.65;
+  border-radius: 62% 38% 46% 54% / 60% 44% 56% 40%;
+  transform: rotate(-15deg);
+}
+
+/* Blob 2 – medium, mintgroen, overlapping blob 1 */
+.blob2 {
+  position: absolute;
+  bottom: 5%;
+  left: 15%;
   width: 55%;
   height: 60%;
-  background: radial-gradient(ellipse at center, #e3ebf6 0%, transparent 70%);
-  border-radius: 50%;
-  z-index: 0;
-  pointer-events: none;
+  background: #c3e6bb;
+  opacity: 0.55;
+  border-radius: 44% 56% 62% 38% / 52% 64% 36% 48%;
+  transform: rotate(10deg);
 }
 
-.app::after {
-  content: "";
-  position: fixed;
-  bottom: -10%;
-  left: -8%;
-  width: 50%;
-  height: 55%;
-  background: radial-gradient(ellipse at center, #c3e6bb 0%, transparent 70%);
-  border-radius: 50%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Third organic shape via separate element */
-.bgShape {
-  position: fixed;
-  top: 40%;
-  right: -5%;
-  width: 40%;
-  height: 45%;
-  background: radial-gradient(ellipse at center, #d7f6d2 0%, transparent 70%);
-  border-radius: 50%;
-  z-index: 0;
-  pointer-events: none;
+/* Blob 3 – smallest, lichtblauw, top-right corner */
+.blob3 {
+  position: absolute;
+  top: -8%;
+  right: -6%;
+  width: 45%;
+  height: 50%;
+  background: #e3ebf6;
+  opacity: 0.45;
+  border-radius: 54% 46% 38% 62% / 48% 58% 42% 52%;
+  transform: rotate(20deg);
 }
 
 /* Header */

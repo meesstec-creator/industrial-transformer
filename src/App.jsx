@@ -151,7 +151,11 @@ IMPORTANT GUIDELINES:
 
   return (
     <div className={styles.app}>
-      <div className={styles.bgShape} />
+      <div className={styles.bgBlobs}>
+        <div className={styles.blob1} />
+        <div className={styles.blob2} />
+        <div className={styles.blob3} />
+      </div>
       <header className={styles.header}>
         <h1 className={styles.title}>Herontwikkel je Pand</h1>
         <p className={styles.subtitle}>
