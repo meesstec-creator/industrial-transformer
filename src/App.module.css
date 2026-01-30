@@ -16,7 +16,7 @@
   min-height: 100vh;
   background: #ffffff;
   color: #1a1a2e;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Univers", "Helvetica Neue", Helvetica, Arial, sans-serif;
   position: relative;
 }
 
@@ -76,8 +76,9 @@
   background: #0098d8;
   color: #ffffff;
   padding: 0.65rem 2rem;
-  font-size: 0.95rem;
+  font-size: 1.14rem;
   font-weight: 700;
+  font-family: "Univers", "Helvetica Neue", Helvetica, Arial, sans-serif;
   letter-spacing: 0.02em;
 }
 
