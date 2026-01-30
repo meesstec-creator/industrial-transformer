@@ -17,6 +17,40 @@ const BUILDING_TYPES = [
   { id: "garage", name: "Garage / Werkplaats", prompt: "garage workshop building" },
 ];
 
+const VERDUURZAMING = [
+  {
+    category: "Daken",
+    measures: [
+      { id: "sedum-dak", name: "Sedumdak", prompt: "Extensive green sedum roofing covering flat industrial roof. Mixed succulent vegetation in varied colors: bright green, yellow-green, reddish-brown, and burgundy tones. Low-growing drought-resistant plants. Substrate layer visible at edges. Natural, slightly irregular growth pattern." },
+      { id: "biosolar-dak", name: "Biosolar dak", prompt: "Biosolar roof combining green sedum vegetation with tilted solar panel arrays. Solar panels mounted at 15-20 degree angle on metal frames above the sedum layer. Green-red-yellow succulent plants growing between and under panel rows. Synergy between cooling effect of plants and solar panel efficiency." },
+      { id: "zonnepanelen-dak", name: "Zonnepanelen", prompt: "Large-scale rooftop solar installation on corrugated metal industrial warehouse roof. Grid pattern of photovoltaic panels covering majority of roof surface. Blue-black monocrystalline panels with aluminum frames." },
+    ],
+  },
+  {
+    category: "Gevels",
+    measures: [
+      { id: "klimplanten-rek", name: "Klimplanten op rekken", prompt: "Vertical greening system on industrial building facade. Metal trellis grid structure attached to wall with climbing plants. Dense ivy (Hedera helix) or Virginia creeper coverage. Plants growing upward on support structure against cladding or concrete panels. Full green coverage in summer appearance." },
+      { id: "klimplanten-direct", name: "Klimplanten direct", prompt: "Self-clinging climbing plants growing directly on brick facade of commercial building. Ivy (Hedera) or Parthenocissus covering lower half of wall, growing between windows. Organic growth pattern, established planting of several years." },
+      { id: "groene-gevel-cassettes", name: "Groene gevel cassettes", prompt: "Modular living wall system on industrial building. Pre-cultivated green facade cassettes in grid pattern. Mixed planting with ferns, grasses, and perennials. Integrated irrigation system visible at edges." },
+    ],
+  },
+  {
+    category: "Terrein & Parkeren",
+    measures: [
+      { id: "solar-carport", name: "Solar carport", prompt: "Solar carport structure over parking spaces at business park. Angled photovoltaic canopy supported by wooden A-frame or steel columns. Electric vehicle charging stations with green-painted parking bays. Multiple cars parked underneath including EVs." },
+      { id: "grastegels", name: "Grastegels", prompt: "Grass-grid paver parking surface (grasbetontegels). Concrete grid pattern with grass growing through openings. Permeable parking solution allowing rainwater infiltration. Cars parked on green parking surface. Combination of grey concrete grid and green grass strips." },
+      { id: "waterdoorlatend", name: "Waterdoorlatend terrein", prompt: "Permeable paving parking area at industrial site. Infiltration-friendly surface with visible drainage gaps between pavers. Water-permeable hardscape solution for climate adaptation." },
+    ],
+  },
+  {
+    category: "Erfafscheiding",
+    measures: [
+      { id: "groene-haag", name: "Groene haag", prompt: "Dense evergreen hedge as boundary fencing at industrial site. Privet or beech hedge approximately 1.5-2 meters height. Neatly trimmed formal hedge along property line. Industrial buildings visible behind hedge." },
+      { id: "groene-schutting", name: "Groene erfafscheiding", prompt: "Green boundary combining concrete wall or fence with climbing plants or hedge. Lower section dense hedge planting, upper section solid barrier. Softening of hard infrastructure with green elements." },
+    ],
+  },
+];
+
 function App() {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -25,6 +59,7 @@ function App() {
   const [selectedStyle, setSelectedStyle] = useState("modern-industrieel");
   const [buildingType, setBuildingType] = useState("warehouse");
   const [transformMode, setTransformMode] = useState("renovatie");
+  const [selectedMeasures, setSelectedMeasures] = useState([]);
   const [usedPrompt, setUsedPrompt] = useState(null);
   const [error, setError] = useState(null);
   const [apiKey, setApiKey] = useState(() => localStorage.getItem("pollinations-api-key") || "sk_MGCJnAI2YG9Zz9Cqh5wC1UPEIBHUKPZH");
@@ -33,6 +68,12 @@ function App() {
   function handleApiKeyChange(key) {
     setApiKey(key);
     localStorage.setItem("pollinations-api-key", key);
+  }
+
+  function toggleMeasure(id) {
+    setSelectedMeasures((prev) =>
+      prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id]
+    );
   }
 
   function handleImageUpload(e) {
@@ -54,6 +95,16 @@ function App() {
     const styleInfo = STYLES.find((s) => s.id === selectedStyle);
     const buildingInfo = BUILDING_TYPES.find((b) => b.id === buildingType);
 
+    // Build sustainability measures prompt fragment
+    const allMeasures = VERDUURZAMING.flatMap((cat) => cat.measures);
+    const activeMeasures = allMeasures.filter((m) => selectedMeasures.includes(m.id));
+    let measuresPrompt = "";
+    if (activeMeasures.length > 0) {
+      measuresPrompt = "\n\nSUSTAINABILITY MEASURES TO APPLY:\n" +
+        activeMeasures.map((m) => `- ${m.prompt}`).join("\n") +
+        "\n\nApply these sustainability measures realistically to the building and its surroundings. Dutch commercial building context, realistic Dutch weather and lighting.";
+    }
+
     let prompt;
 
     if (uploadedImage && transformMode === "renovatie") {
@@ -66,7 +117,7 @@ IMPORTANT GUIDELINES:
 - Be realistic about what is achievable with this specific building
 - Only modernize the building facade and add green urban landscaping (trees, grass, hedges) to the public space
 - The result must describe the ORIGINAL building with improvements, not a fantasy building
-- Photorealistic architectural photography edit`;
+- Photorealistic architectural photography edit${measuresPrompt}`;
     } else if (uploadedImage && transformMode === "volledig") {
       prompt = `You are an expert in real estate development and architecture. Edit this photo: replace the ${buildingInfo.prompt} with a completely new building in the style: ${styleInfo.name} (${styleInfo.prompt}).
 
@@ -76,9 +127,9 @@ IMPORTANT GUIDELINES:
 - Keep ALL surroundings exactly the same: same cars on the road, same street, same sky, same neighboring buildings, same trees that are not on the plot
 - Only replace the building itself and add green urban landscaping (trees, grass, hedges) to the public space directly around it
 - The new building should be a realistic, buildable design - not a fantasy
-- Photorealistic architectural photography, same lighting conditions as original photo`;
+- Photorealistic architectural photography, same lighting conditions as original photo${measuresPrompt}`;
     } else {
-      prompt = `Architectural photography of a renovated ${buildingInfo.prompt} transformed into ${styleInfo.prompt}. The building maintains its original footprint and scale but features a completely modernized exterior. This is a realistic transformation, not a fantasy building. Keep the surroundings urban and contextual. Add green public space with trees, grass and hedges around the building. Professional architectural visualization, golden hour lighting, photorealistic, street-level perspective, high-end real estate photography style`;
+      prompt = `Architectural photography of a renovated ${buildingInfo.prompt} transformed into ${styleInfo.prompt}. The building maintains its original footprint and scale but features a completely modernized exterior. This is a realistic transformation, not a fantasy building. Keep the surroundings urban and contextual. Add green public space with trees, grass and hedges around the building. Professional architectural visualization, golden hour lighting, photorealistic, street-level perspective, high-end real estate photography style${measuresPrompt}`;
     }
 
     try {
@@ -249,6 +300,34 @@ IMPORTANT GUIDELINES:
                 <span className={styles.cardDesc}>Nieuw gebouw, zelfde perceel en omgeving</span>
               </div>
             </div>
+          </div>
+
+          <div className={styles.section}>
+            <label className={styles.label}>5. Verduurzamingsmaatregelen (optioneel)</label>
+            {VERDUURZAMING.map((cat) => (
+              <div key={cat.category} className={styles.measureCategory}>
+                <span className={styles.categoryLabel}>{cat.category}</span>
+                <div className={styles.cardList}>
+                  {cat.measures.map((m) => (
+                    <div
+                      key={m.id}
+                      className={`${styles.styleCard} ${selectedMeasures.includes(m.id) ? styles.active : ""}`}
+                      onClick={() => toggleMeasure(m.id)}
+                    >
+                      {m.name}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+            {selectedMeasures.length > 0 && (
+              <button
+                className={styles.clearMeasures}
+                onClick={() => setSelectedMeasures([])}
+              >
+                Wis selectie ({selectedMeasures.length})
+              </button>
+            )}
           </div>
 
           <button

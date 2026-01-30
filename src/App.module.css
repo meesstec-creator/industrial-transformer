@@ -258,6 +258,41 @@
   color: #0086be;
 }
 
+/* Verduurzaming measures */
+.measureCategory {
+  margin-bottom: 0.6rem;
+}
+
+.measureCategory:last-child {
+  margin-bottom: 0;
+}
+
+.categoryLabel {
+  display: block;
+  font-size: 0.7rem;
+  color: #869a34;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.03em;
+}
+
+.clearMeasures {
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.7rem;
+  background: none;
+  border: 1px solid #dfe1e6;
+  border-radius: 4px;
+  color: #8a8fa3;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.clearMeasures:hover {
+  color: #ed5f59;
+  border-color: #ed5f59;
+}
+
 /* Generate button */
 .generateBtn {
   display: flex;
