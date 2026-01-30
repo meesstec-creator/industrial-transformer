@@ -151,6 +151,7 @@ IMPORTANT GUIDELINES:
 
   return (
     <div className={styles.app}>
+      <div className={styles.bgShape} />
       <header className={styles.header}>
         <h1 className={styles.title}>Herontwikkel je Pand</h1>
         <p className={styles.subtitle}>

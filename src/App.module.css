@@ -1,12 +1,69 @@
+/*
+  Brand palette:
+  Blauw (primair): #0098d8
+  Lichtgroen:      #bfe268
+  Geel:            #f8cd4d
+  Lichtblauw:      #b0daef
+  Rood:            #ed5f59
+  Lila:            #d3c5fb
+  Olijfgroen:      #869a34
+  Zalmroze:        #f5bdbc
+  Paars:           #8157be
+  Lichtgeel:       #fdefa1
+*/
+
 .app {
   min-height: 100vh;
-  background: #f5f6f8;
+  background: #ffffff;
   color: #1a1a2e;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.app::before {
+  content: "";
+  position: fixed;
+  top: -15%;
+  right: -10%;
+  width: 55%;
+  height: 60%;
+  background: radial-gradient(ellipse at center, #e3ebf6 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.app::after {
+  content: "";
+  position: fixed;
+  bottom: -10%;
+  left: -8%;
+  width: 50%;
+  height: 55%;
+  background: radial-gradient(ellipse at center, #c3e6bb 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Third organic shape via separate element */
+.bgShape {
+  position: fixed;
+  top: 40%;
+  right: -5%;
+  width: 40%;
+  height: 45%;
+  background: radial-gradient(ellipse at center, #d7f6d2 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* Header */
 .header {
+  position: relative;
+  z-index: 1;
   text-align: left;
   padding: 2rem 2rem 1.5rem;
   max-width: 1240px;
@@ -30,6 +87,8 @@
 
 /* Layout */
 .container {
+  position: relative;
+  z-index: 1;
   max-width: 620px;
   margin: 2rem auto;
   padding: 0 2rem 3rem;
@@ -105,7 +164,7 @@
 
 /* Upload */
 .upload {
-  border: 1px dashed #c4c8d4;
+  border: 1px dashed #b0daef;
   border-radius: 8px;
   padding: 1.5rem;
   text-align: center;
@@ -120,7 +179,7 @@
 
 .upload:hover {
   border-color: #0098d8;
-  background: #f0f8fc;
+  background: #eef7fb;
 }
 
 .uploadedImg {
@@ -159,7 +218,7 @@
 }
 
 .active {
-  background: #e8f4fa;
+  background: #eef7fb;
   border-color: #0098d8;
   color: #0098d8;
   font-weight: 600;
@@ -201,7 +260,7 @@
 }
 
 .generateBtn:disabled {
-  background: #a0d4eb;
+  background: #b0daef;
   cursor: not-allowed;
 }
 
@@ -209,10 +268,10 @@
 .error {
   margin-top: 1rem;
   padding: 0.7rem 1rem;
-  background: #fef2f2;
-  border: 1px solid #f0c4c4;
+  background: #fdf0f0;
+  border: 1px solid #f5bdbc;
   border-radius: 6px;
-  color: #b91c1c;
+  color: #ed5f59;
   font-size: 0.85rem;
   text-align: center;
 }
@@ -239,15 +298,16 @@
 
 /* Prompt box */
 .promptBox {
-  background: #f9fafb;
-  border: 1px solid #dfe1e6;
+  background: #fdfef5;
+  border: 1px solid #f8cd4d;
+  border-left: 3px solid #f8cd4d;
   border-radius: 6px;
   padding: 0.75rem 1rem;
 }
 
 .promptTitle {
   font-size: 0.7rem;
-  color: #0098d8;
+  color: #869a34;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-weight: 600;
@@ -297,8 +357,8 @@
 }
 
 .btnSecondary:hover:not(:disabled) {
-  border-color: #0098d8;
-  color: #0098d8;
+  border-color: #bfe268;
+  color: #869a34;
 }
 
 .btnSecondary:disabled {
@@ -340,7 +400,7 @@
   position: absolute;
   top: 0.4rem;
   left: 0.4rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   color: #3a3f52;
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
@@ -353,6 +413,8 @@
 
 /* Footer */
 .footer {
+  position: relative;
+  z-index: 1;
   text-align: center;
   padding: 1.5rem;
   color: #8a8fa3;
